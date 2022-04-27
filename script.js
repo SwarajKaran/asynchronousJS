@@ -3,7 +3,7 @@
 const btn = document.querySelector('.btn-country');
 const countriesContainer = document.querySelector('.countries');
 ///////////////////////////////////////
-/*
+
 const renderCountry = function (data, className = '') {
   const html = `
   <article class="country ${className}">
@@ -23,6 +23,7 @@ const renderCountry = function (data, className = '') {
   console.log(html);
   countriesContainer.style.opacity = 1;
 };
+/*
 const getCountryAndNeighbour = function (country) {
   const request = new XMLHttpRequest(); //old school AJAX call
   // AJAX call country 1
@@ -56,5 +57,23 @@ getCountryAndNeighbour('usa');
 
 // PROMISE
 
-const request = fetch(`https://restcountries.com/v2/name/usa`);
-console.log(request);
+// const request = fetch(`https://restcountries.com/v2/name/usa`);
+// console.log(request);
+
+// const getCountryData = function (country) {
+//   fetch(`https://restcountries.com/v2/name/${country}`)
+//     .then(function (response) {
+//       console.log(response);
+//       return response.json();
+//     })
+//     .then(function (data) {
+//       console.log(data);
+//       renderCountry(data[0]);
+//     });
+// };
+const getCountryData = function (country) {
+  fetch(`https://restcountries.com/v2/name/${country}`)
+    .then(response => response.json())
+    .then(data => renderCountry(data[0]));
+};
+getCountryData('usa');
