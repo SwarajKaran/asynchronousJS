@@ -21,7 +21,11 @@ const renderCountry = function (data, className = '') {
   `;
   countriesContainer.insertAdjacentHTML('beforeend', html);
   console.log(html);
-  countriesContainer.style.opacity = 1;
+  // countriesContainer.style.opacity = 1; // added in finally
+};
+const renderError = function (msg) {
+  countriesContainer.insertAdjacentText('beforeend', msg);
+  // countriesContainer.style.opacity = 1; // added in finally
 };
 /*
 const getCountryAndNeighbour = function (country) {
@@ -71,9 +75,13 @@ getCountryAndNeighbour('usa');
 //       renderCountry(data[0]);
 //     });
 // };
+
 const getCountryData = function (country) {
   fetch(`https://restcountries.com/v2/name/${country}`)
-    .then(response => response.json())
+    .then(
+      response => response.json()
+      // ,err => alert(err)
+    )
     .then(data => {
       renderCountry(data[0]);
       const neighbour = data[0]?.borders[0];
@@ -82,7 +90,22 @@ const getCountryData = function (country) {
       //Country 2
       return fetch(`https://restcountries.com/v2/alpha/${neighbour}`);
     })
-    .then(response => response.json())
-    .then(data => renderCountry(data, 'neighbour'));
+    .then(
+      response => response.json()
+      // ,err => alert(err)
+    )
+    .then(data => renderCountry(data, 'neighbour')) // when promise is fulfilled
+    .catch(err => {
+      // when promise is rejected
+      console.error(`${err}`);
+      renderError(`Something went wrong ${err.message}. Try again!`);
+    })
+    .finally(() => {
+      // always be called no matter promise is rejected or fulfilled
+      countriesContainer.style.opacity = 1;
+    });
 };
-getCountryData('indonesia');
+btn.addEventListener('click', function () {
+  getCountryData('indonesia');
+});
+getCountryData('usfdggf'); // catch will not handle 404 errors
