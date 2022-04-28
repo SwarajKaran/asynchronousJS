@@ -252,3 +252,6 @@ wait(2)
     return wait(1);
   })
   .then(() => console.log('I waited for 1 secinds'));
+
+Promise.resolve('You win').then(x => console.log(x));
+Promise.reject(new Error('You loose')).catch(err => console.log(err));
