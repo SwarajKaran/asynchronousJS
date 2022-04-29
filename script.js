@@ -251,7 +251,24 @@ wait(2)
     console.log('I waited for 2 seconds');
     return wait(1);
   })
-  .then(() => console.log('I waited for 1 secinds'));
+  .then(() => console.log('I waited for 1 seconds'));
 
 Promise.resolve('You win').then(x => console.log(x));
 Promise.reject(new Error('You loose')).catch(err => console.log(err));
+
+wait(1)
+  .then(() => {
+    console.log('1 sec passed');
+    return wait(1);
+  })
+  .then(() => {
+    console.log('2 sec passed');
+    return wait(1);
+  })
+  .then(() => {
+    console.log('3 sec passed');
+    return wait(1);
+  })
+  .then(() => {
+    return console.log('4 sec passed');
+  });
