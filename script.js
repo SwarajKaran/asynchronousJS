@@ -182,10 +182,15 @@ TEST COORDINATES 2: -33.933, 18.474
 
 GOOD LUCK 😀
 
+*/
+const whereAmI = function () {
+  getPosition()
+    .then(pos => {
+      const { latitude: lat, longitude: lng } = pos.coords;
+      const url = `https://geocode.xyz/${lat},${lng}?json=1`;
+      return fetch(url);
+    })
 
-const whereAmI = function (lat, lng) {
-  const url = `https://geocode.xyz/${lat},${lng}?json=1`;
-  fetch(url)
     .then(response => {
       // console.log(response);
       return response.json();
@@ -208,6 +213,7 @@ const whereAmI = function (lat, lng) {
     })
     .finally(() => (countriesContainer.style.opacity = 1));
 };
+/*
 // whereAmI(17.4549679, 78.3500869);
 whereAmI(52.508, 13.381);
 whereAmI(19.037, 72.873);
@@ -224,7 +230,7 @@ Promise.resolve('Resolve promise 2').then(res => {
   console.log(res);
 });
 console.log('Test end');
-*/
+
 
 const lotteryPromise = new Promise(function (resolve, reject) {
   console.log('Lottery draw is happening');
@@ -272,3 +278,16 @@ wait(1)
   .then(() => {
     return console.log('4 sec passed');
   });
+*/
+
+const getPosition = function () {
+  return new Promise(function (resolve, reject) {
+    //   navigator.geolocation.getCurrentPosition(
+    //     position => resolve(position),
+    //     err => reject(err)
+    //   );
+    navigator.geolocation.getCurrentPosition(resolve, reject);
+  });
+};
+
+btn.addEventListener('click', whereAmI);
