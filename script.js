@@ -452,8 +452,8 @@ console.log('1: Will get location');
     console.log('3: Finished getting location');
   }
 })();
-*/
 
+*/
 const getJSON = function (url, errorMsg = `Something went wrong`) {
   return fetch(url).then(
     response => {
@@ -463,7 +463,7 @@ const getJSON = function (url, errorMsg = `Something went wrong`) {
     // ,err => alert(err)
   );
 };
-
+/*
 const get3Countries = async function (c1, c2, c3) {
   try {
     // const [data1] = await getJSON(`https://restcountries.com/v2/name/${c1}`);
@@ -482,3 +482,52 @@ const get3Countries = async function (c1, c2, c3) {
 };
 
 get3Countries('usa', 'australia', 'tanzania');
+*/
+// 3 other promise combinators
+
+// 1. Promise.race
+
+(async function () {
+  const res = await Promise.race([
+    getJSON(`https://restcountries.com/v2/name/italy`),
+    getJSON(`https://restcountries.com/v2/name/usa`),
+    getJSON(`https://restcountries.com/v2/name/egypt`),
+  ]);
+  console.log(res[0]);
+})();
+const timeout = function (sec) {
+  return new Promise(function (_, reject) {
+    setTimeout(() => {
+      reject(new Error('Request took too long!'));
+    }, sec * 1000);
+  });
+};
+
+Promise.race([getJSON(`https://restcountries.com/v2/name/usa`), timeout(0.4)])
+  .then(res => console.log(res[0]))
+  .catch(err => console.error(err));
+
+// 2. Promise.allSettled
+// returs all the result no matter the status of settlement - reject or resolve
+Promise.allSettled([
+  Promise.resolve('Success'),
+  Promise.reject('Error'),
+  Promise.resolve('Success'),
+]).then(res => console.log(res));
+
+// returns error if any error occurs
+Promise.all([
+  Promise.resolve('Success'),
+  Promise.reject('Error'),
+  Promise.resolve('Success'),
+]).then(res => console.log(res));
+
+// 3. Promise.any([]) ES 2021
+
+//returns first fulfilled promises, rejected are ignored
+// AggregateError: All promises were rejected - if all are rejected
+Promise.any([
+  Promise.resolve('Success'),
+  Promise.reject('Error'),
+  Promise.resolve('Success'),
+]).then(res => console.log(res));
