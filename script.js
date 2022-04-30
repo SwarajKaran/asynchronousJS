@@ -246,13 +246,13 @@ const lotteryPromise = new Promise(function (resolve, reject) {
 lotteryPromise.then(res => console.log(res)).catch(err => console.log(err));
 
 // Promisifying setTimeout
-
+*/
 const wait = function (seconds) {
   return new Promise(function (resolve) {
     setTimeout(resolve, seconds * 1000);
   });
 };
-
+/*
 wait(2)
   .then(() => {
     console.log('I waited for 2 seconds');
@@ -326,21 +326,60 @@ GOOD LUCK 😀
 
 const createImage = function (imgPath) {
   return new Promise((resolve, reject) => {
-    document.createElement('img');
     const img = document.createElement('img');
     img.src = imgPath;
-    let imgErr = false;
-    img.addEventListener('error', function () {
-      imgErr = true;
-    });
-    if (!imgErr) {
-      imageContainer.appendChild(img);
+    // let imgErr = false;
+    // img.addEventListener('error', function () {
+    //   imgErr = true;
+    // });
+    // if (!imgErr) {
+    //   imageContainer.appendChild(img);
+    //   resolve(img);
+    // } else {
+    //   reject(new Error('Error loading Image'));
+    // }
+
+    img.addEventListener('load', function () {
+      imageContainer.append(img);
       resolve(img);
-    } else {
-      reject(new Error('Error loading Image'));
-    }
+    });
+    img.addEventListener('error', function () {
+      reject(new Error('Error loading image'));
+    });
   });
 };
+// createImage('./img/img-1.jpg')
+//   .then(img => {
+//     console.log('Image 1 loaded');
+//     wait(2)
+//       .then(() => {
+//         img.style.display = 'none';
+//         return createImage('./img/img-2.jpg');
+//       })
+//       .then(img => {
+//         console.log('Image 2 loaded');
+//         wait(2).then(() => (img.style.display = 'none'));
+//       });
+//   })
+//   .catch(err => console.log(err));
+let currImage;
+createImage('./img/img-1.jpg')
+  .then(img => {
+    currImage = img;
+    console.log('Image 1 loaded');
+    return wait(2);
+  })
+  .then(() => {
+    currImage.style.display = 'none';
+    return createImage('./img/img-2.jpg');
+  })
+  .then(img => {
+    currImage = img;
+    console.log('Image 2 loaded');
+    return wait(2);
+  })
+  .then(() => (currImage.style.display = 'none'));
+
 // document.createElement('img');
 // const img = document.createElement('img');
 // // img.setAttribute('src', imgPath);
