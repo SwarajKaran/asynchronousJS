@@ -21,7 +21,7 @@ const renderCountry = function (data, className = '') {
   </article>
   `;
   countriesContainer.insertAdjacentHTML('beforeend', html);
-  console.log(html);
+  // console.log(html);
   // countriesContainer.style.opacity = 1; // added in finally
 };
 const renderError = function (msg) {
@@ -414,7 +414,7 @@ const whereAmI = async function () {
     // console.log(resGeo);
     if (!resGeo.ok) throw new Error('Problem getting location');
     const dataGeo = await resGeo.json();
-    console.log(dataGeo);
+    // console.log(dataGeo);
 
     //Country data
     const res = await fetch(
@@ -422,22 +422,33 @@ const whereAmI = async function () {
     );
     if (!res.ok) throw new Error('Error getting country');
     const data = await res.json();
-    console.log(data);
+    // console.log(data);
     renderCountry(data.slice(-1)[0]);
+    return `You are in ${dataGeo.city}, ${dataGeo.country}`;
   } catch (err) {
-    console.error(err);
+    // console.error(err);
     renderError(`${err.message}`);
+    //Reject promise returned from async
+    throw err;
   } finally {
     countriesContainer.style.opacity = 1;
   }
 };
-whereAmI();
-console.log('FIRST');
+console.log('1: Will get location');
+// console.log(whereAmI());
+// whereAmI()
+//   .then(city => console.log(`2: ${city}`))
+//   .catch(err => console.log(`2: ${err.message}`))
+//   .finally(() => console.log('3: Finished getting location'));
 
-// try {
-//   let y = 1;
-//   const x = 2;
-//   x = 3;
-// } catch (err) {
-//   alert(err.message);
-// }
+// Immediately Invoked Function
+(async function () {
+  try {
+    const city = await whereAmI();
+    console.log(`2: ${city}`);
+  } catch (err) {
+    console.log(`2: ${err.message}`);
+  } finally {
+    console.log('3: Finished getting location');
+  }
+})();
