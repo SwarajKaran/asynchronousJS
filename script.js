@@ -309,7 +309,7 @@ If this part is too tricky for you, just watch the first part of the solution.
 PART 2
 2. Comsume the promise using .then and also add an error handler;
 3. After the image has loaded, pause execution for 2 seconds using the wait function we created earlier;
-4. After the 2 seconds have passed, hide the current image (set display to 'none'), and load a second image (HINT: Use the image element returned by the createImage promise to hide the current image. You will need a global variable for that 😉);
+4. After the 2 seconds have passed, hide the current image (set display to 'none'), and load a second image resolve, reject(HINT: Use the image element returned by the createImage promise to hide the current image. You will need a global variable for that 😉);
 5. After the second image has loaded, pause execution for 2 seconds again;
 6. After the 2 seconds have passed, hide the current image.
 
@@ -323,3 +323,34 @@ GOOD LUCK 😀
 // 3. non-display it
 // 4. load image 2
 // repeat 2 & 3
+
+const createImage = function (imgPath) {
+  return new Promise((resolve, reject) => {
+    document.createElement('img');
+    const img = document.createElement('img');
+    img.src = imgPath;
+    let imgErr = false;
+    img.addEventListener('error', function () {
+      imgErr = true;
+    });
+    if (!imgErr) {
+      imageContainer.appendChild(img);
+      resolve(img);
+    } else {
+      reject(new Error('Error loading Image'));
+    }
+  });
+};
+// document.createElement('img');
+// const img = document.createElement('img');
+// // img.setAttribute('src', imgPath);
+// img.src = 'imgPath';
+// img.addEventListener('error', function () {
+//   console.log('Error');
+//   return true;
+// });
+// if (img.src) {
+//   imageContainer.appendChild(img);
+// }
+// console.log(imageContainer);
+// console.log(img.onerror);
