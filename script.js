@@ -22,7 +22,7 @@ const renderCountry = function (data, className = '') {
   `;
   countriesContainer.insertAdjacentHTML('beforeend', html);
   console.log(html);
-  // countriesContainer.style.opacity = 1; // added in finally
+  countriesContainer.style.opacity = 1; // added in finally
 };
 const renderError = function (msg) {
   countriesContainer.insertAdjacentText('beforeend', msg);
@@ -183,7 +183,7 @@ TEST COORDINATES 2: -33.933, 18.474
 
 GOOD LUCK 😀
 
-*/
+
 const whereAmI = function () {
   getPosition()
     .then(pos => {
@@ -214,7 +214,7 @@ const whereAmI = function () {
     })
     .finally(() => (countriesContainer.style.opacity = 1));
 };
-/*
+
 // whereAmI(17.4549679, 78.3500869);
 whereAmI(52.508, 13.381);
 whereAmI(19.037, 72.873);
@@ -316,7 +316,7 @@ PART 2
 TEST DATA: Images in the img folder. Test the error handler by passing a wrong image path. Set the network speed to 'Fast 3G' in the dev tools Network tab, otherwise images load too fast.
 
 GOOD LUCK 😀
-*/
+
 
 // 1. loading of image 1
 // 2. displayin of image
@@ -348,6 +348,7 @@ const createImage = function (imgPath) {
     });
   });
 };
+
 // createImage('./img/img-1.jpg')
 //   .then(img => {
 //     console.log('Image 1 loaded');
@@ -393,3 +394,32 @@ createImage('./img/img-1.jpg')
 // }
 // console.log(imageContainer);
 // console.log(img.onerror);
+*/
+
+const getPosition = function () {
+  return new Promise(function (resolve, reject) {
+    navigator.geolocation.getCurrentPosition(resolve, reject);
+  });
+};
+
+const whereAmI = async function () {
+  // Geolocation
+  const pos = await getPosition();
+  const { latitude: lat, longitude: lng } = pos.coords;
+
+  // Reverse geo-coding
+  const url = `https://geocode.xyz/${lat},${lng}?json=1`;
+  const resGeo = await fetch(url);
+  const dataGeo = await resGeo.json();
+  console.log(dataGeo);
+
+  //Country data
+  const res = await fetch(
+    `https://restcountries.com/v2/name/${dataGeo.country}`
+  );
+  const data = await res.json();
+  console.log(data);
+  renderCountry(data.slice(-1)[0]);
+};
+whereAmI();
+console.log('FIRST');
