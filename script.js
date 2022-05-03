@@ -551,3 +551,40 @@ TEST DATA: ['img/img-1.jpg', 'img/img-2.jpg', 'img/img-3.jpg']. To test, turn of
 
 GOOD LUCK 😀
 */
+const createImage = function (imgPath) {
+  return new Promise((resolve, reject) => {
+    const img = document.createElement('img');
+    img.src = imgPath;
+    img.addEventListener('load', function () {
+      imageContainer.append(img);
+      resolve(img);
+    });
+    img.addEventListener('error', function () {
+      reject(new Error('Error loading image'));
+    });
+  });
+};
+let currImage;
+const loadAll = async function () {
+  const res = await createImage('./img/img-1.jpg');
+  currImage = res;
+  console.log('Image 1 loaded');
+  return wait(2);
+};
+
+// createImage('./img/img-1.jpg')
+//   .then(img => {
+//     currImage = img;
+//     console.log('Image 1 loaded');
+//     return wait(2);
+//   })
+//   .then(() => {
+//     currImage.style.display = 'none';
+//     return createImage('./img/img-2.jpg');
+//   })
+//   .then(img => {
+//     currImage = img;
+//     console.log('Image 2 loaded');
+//     return wait(2);
+//   })
+//   .then(() => (currImage.style.display = 'none'));
