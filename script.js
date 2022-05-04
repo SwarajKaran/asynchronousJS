@@ -564,11 +564,14 @@ const createImage = function (imgPath) {
     });
   });
 };
+
 let currImage;
+
 const loadAll = async function () {
   const res = await createImage('./img/img-1.jpg');
   currImage = res;
   console.log('Image 1 loaded');
+
   return wait(2);
 };
 
