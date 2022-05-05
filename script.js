@@ -568,12 +568,22 @@ const createImage = function (imgPath) {
 let currImage;
 
 const loadAll = async function () {
-  const res = await createImage('./img/img-1.jpg');
-  currImage = res;
-  console.log('Image 1 loaded');
+  try {
+    let img = await createImage('./img/img-1.jpg');
+    console.log('Image 1 loaded');
+    await wait(2);
+    img.style.display = 'none';
 
-  return wait(2);
+    img = await createImage('./img/img-2.jpg');
+    console.log('Image 2 loaded');
+    await wait(2);
+    img.style.display = 'none';
+  } catch {
+    console.log(err);
+  }
 };
+
+loadAll();
 
 // createImage('./img/img-1.jpg')
 //   .then(img => {
